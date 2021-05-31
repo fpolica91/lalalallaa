@@ -60,5 +60,3 @@ contract Tangible is ERC721 {
 
     fallback() external payable {}
 }
-
-// /Users/fabriciopolicarpo/Desktop/Projects/drizzle-react-tutorial/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol
