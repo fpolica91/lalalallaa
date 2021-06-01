@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { Container, CustomForm, Input } from './styles'
 
 export interface FormProps {
-  handleSubmit(name: string):void; 
+  handleSubmit(name: string, event: any):void; 
 }
 
 const Form: React.FC<FormProps> = ({handleSubmit}) => {
-  const [name, setName] = useState()
+  const [name, setName] = useState("")
   
   const handleChange = (event) =>{
+    event.preventDefault()
     setName(event.target.value)
   }
   
 
   return (
     <Container>
-      <CustomForm onSubmit={() => handleSubmit(name)}>
+      <CustomForm >
         <label htmlFor="name">
           Enter name
         </label>
@@ -23,7 +24,7 @@ const Form: React.FC<FormProps> = ({handleSubmit}) => {
           value={name}
           onChange={event => handleChange(event)}
         />
-        <button type="submit">
+        <button type="submit" onClick={(event) => handleSubmit(name, event)}>
           submit
         </button>
       </CustomForm>

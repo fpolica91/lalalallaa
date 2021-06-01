@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from './components/Form'
 
 
@@ -8,7 +8,8 @@ function App({ drizzle }) {
   const [drizzState, setDrizzState] = useState<any>([])
   const [tangible, setTangible] = useState<any>()
 
-  const setValue = (name) => {
+  const setValue = (name, event) => {
+    event.preventDefault()
     if(tangible !== undefined){
       tangible.methods['createItem'].cacheSend(name, {
         from : drizzState?.accounts[0]
