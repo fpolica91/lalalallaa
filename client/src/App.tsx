@@ -8,13 +8,14 @@ function App({ drizzle }) {
   const [drizzState, setDrizzState] = useState<any>([])
   const [tangible, setTangible] = useState<any>()
 
-  const setValue = (name, event) => {
+  const setValue = async (name, event) => {
     event.preventDefault()
-    if(tangible !== undefined){
-      tangible.methods['createItem'].cacheSend(name, {
-        from : drizzState?.accounts[0]
+    if (tangible !== undefined) {
+      const result = await tangible.methods['createItem'].cacheSend(name, {
+        from: drizzState?.accounts[0]
       })
-     }
+      console.log(result)
+    }
   }
 
   // const stackId = contract.methods["set"].cacheSend(value, {
@@ -32,17 +33,16 @@ function App({ drizzle }) {
       }
       const { Tangible } = drizzle.contracts
       setTangible(Tangible)
-      console.log(Tangible && Tangible.methods['createItem'], "tang")
     })
 
-    
+
   }, [drizzle.contracts, drizzle.store])
 
 
 
   return (
     <>
-      <Form handleSubmit={setValue}/>
+      <Form handleSubmit={setValue} />
     </>
   );
 }
