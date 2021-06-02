@@ -53,6 +53,7 @@ contract TangibleMarketPlace {
         external
         OnlyItemOwner(tokenAddress, tokenId)
         HasTransferApproval(tokenAddress, tokenId)
+        returns (uint256)
     {
         require(
             activeItems[tokenAddress][tokenId] == false,
