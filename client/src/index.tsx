@@ -4,13 +4,14 @@ import './index.css';
 import App from './App';
 import { Drizzle, generateStore, IDrizzleOptions } from '@drizzle/store'
 import Tangible from './contracts/Tangible.json'
+import TangibleMarketPlace from './contracts/TangibleMarketPlace.json'
 
 
 import reportWebVitals from './reportWebVitals';
 
 
 const options: IDrizzleOptions = {
-  contracts: [Tangible as any],
+  contracts: [Tangible as any, TangibleMarketPlace],
   web3: {
     fallback: {
       type: "ws",
