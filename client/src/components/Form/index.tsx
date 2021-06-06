@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Container, CustomForm, Input } from './styles'
 
 export interface FormProps {
-  handleSubmit(name: string, event: any): void;
+  handleSubmit(name: string, event: Event, price: string): void;
 }
 
 const Form: React.FC<FormProps> = ({ handleSubmit }) => {
   const [name, setName] = useState("")
+  const [price, setPrice] = useState("")
 
   const handleChange = (event) => {
     event.preventDefault()
@@ -14,8 +15,9 @@ const Form: React.FC<FormProps> = ({ handleSubmit }) => {
   }
 
   const submitWithin = (event) => {
+    handleSubmit(name, event, price)
     setName("")
-    handleSubmit(name, event)
+    setPrice("")
   }
 
   return (
@@ -27,6 +29,14 @@ const Form: React.FC<FormProps> = ({ handleSubmit }) => {
         <Input
           value={name}
           onChange={event => handleChange(event)}
+        />
+
+        <label htmlFor="price">
+          Enter Price
+        </label>
+        <Input
+          value={price}
+          onChange={event => setPrice(event.target.value)}
         />
         <button type="submit" onClick={(event) => submitWithin(event)}>
           submit

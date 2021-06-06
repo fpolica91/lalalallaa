@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Form from './components/Form'
 
 
+interface AddToMarket {
+  tokenIndex: string,
+  tokenAddress: string,
+  tokenPrice: number
+}
 
 function App({ drizzle }) {
   const [loading, setLoading] = useState<boolean>(true)
@@ -10,28 +15,43 @@ function App({ drizzle }) {
   const [marketplace, setMarketPlace] = useState<any>()
   const [account, setAccount] = useState<any>()
 
-  const setValue = async (name: string, event: Event) => {
+
+
+  const setValue = async (name: string, event: Event, price: string) => {
+    // if (!name) return alert('please enter a valid name')
     event.preventDefault()
     if (tangible !== undefined) {
+
       await tangible.methods['createItem'].cacheSend(name, {
-        from: drizzState?.accounts[0]
+        from: account[0]
       })
+
+
+
 
       tangible.events.ItemCreated()
         .on("data", async (event) => {
-          if (event.returnValues && account) {
-            console.log(event.returnValues[1])
-            tangible.methods.getApproved(event.returnValues[1]).call({ from: account[0] })
-            await tangible.methods.approve(marketplace.address, tangible.address).send({ from: account[0] })
-            await marketplace.methods.addItemToMarket(event.returnValues[1], tangible.address, 10000).send({ from: account[0] });
-          }
-          console.log(marketplace.events.itemAdded())
-        })
 
+          if (event.returnValues && account) {
+            await ensureMarketplaceIsApproved(event.returnValues[1])
+            let nftAddress = event.returnValues[1]
+            await addToMarketPlace({ tokenIndex: nftAddress, tokenAddress: tangible.address, tokenPrice: 10000 })
+          }
+
+        })
     }
   }
 
+  const ensureMarketplaceIsApproved = async (tokenIndex) => {
+    const approvedAddress = await tangible.methods.getApproved(tokenIndex).call({ from: account[0] })
+    if (approvedAddress) {
+      await tangible.methods.approve(marketplace.address, tokenIndex).send({ from: account[0] })
+    }
+  }
 
+  const addToMarketPlace = async ({ tokenIndex, tokenAddress, tokenPrice }: AddToMarket) => {
+    await marketplace.methods.addItemToMarket(tokenIndex, tokenAddress, tokenPrice).send({ from: account[0] });
+  }
 
 
 
@@ -41,16 +61,18 @@ function App({ drizzle }) {
       if (drizzleState.drizzleStatus.initialized) {
         setLoading(false)
         setDrizzState(drizzleState)
+
       }
       const { Tangible, TangibleMarketPlace } = drizzle.contracts
       setTangible(Tangible)
       setMarketPlace(TangibleMarketPlace)
-      setAccount(drizzState?.accounts)
-
+      if (drizzState) {
+        setAccount(drizzleState.accounts)
+      }
     })
 
 
-  }, [drizzState?.accounts, drizzle.contracts, drizzle.store, tangible])
+  }, [drizzState, drizzState.accounts, drizzle.contracts, drizzle.store, tangible])
 
 
 
