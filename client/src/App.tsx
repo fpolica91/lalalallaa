@@ -18,10 +18,14 @@ function App({ drizzle }) {
 
 
   const setValue = async (name: string, event: Event, price: string) => {
-    // if (!name) return alert('please enter a valid name')
     event.preventDefault()
-    if (tangible !== undefined) {
 
+    if (!name || !price) {
+      alert(new Error("please speficy price and name"))
+      return null
+    }
+
+    if (tangible !== undefined) {
       await tangible.methods['createItem'].cacheSend(name, {
         from: account[0]
       })
@@ -79,7 +83,6 @@ function App({ drizzle }) {
   return (
     <>
       <Form handleSubmit={setValue} />
-      <input type="" />
     </>
   );
 }
