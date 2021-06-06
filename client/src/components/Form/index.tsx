@@ -23,23 +23,26 @@ const Form: React.FC<FormProps> = ({ handleSubmit }) => {
   return (
     <Container>
       <CustomForm >
-        <label htmlFor="name">
-          Enter name
-        </label>
-        <Input
-          value={name}
-          onChange={event => handleChange(event)}
-        />
+        <div>
+          <Input
+            value={name}
+            onChange={event => handleChange(event)}
+            placeholder="NFT Name"
+          />
 
-        <label htmlFor="price">
-          Enter Price
-        </label>
-        <Input
-          value={price}
-          onChange={event => setPrice(event.target.value)}
-        />
+          <Input
+            value={price}
+            onChange={event => setPrice(event.target.value)}
+            placeholder="NFT Price"
+          />
+        </div>
+
+
+        <div>
+          <textarea placeholder="NFT Description (max: 300 characters)" name="description" id="description"></textarea>
+        </div>
         <button type="submit" onClick={(event) => submitWithin(event)}>
-          submit
+          <span> Approve </span>
         </button>
       </CustomForm>
     </Container>
